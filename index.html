@@ -205,7 +205,7 @@ body { background:#fff!important; color:#111!important; padding:0!important; mar
 </header>
 <div class="flex-1 flex overflow-hidden">
 <div class="flex-1 overflow-y-auto p-6 pb-20 lg:p-8 lg:pb-8"><div id="eq"></div></div>
-<aside id="exam_sb" class="es w-56 gs border-l border-white/10 p-4 overflow-y-auto shrink-0 transition-all duration-300">
+<aside id="exam_sb" class="hidden es w-56 gs border-l border-white/10 p-4 overflow-y-auto shrink-0 transition-all duration-300">
 <h3 class="text-sm font-semibold mb-3">Navigasi</h3>
 <div id="en" class="grid grid-cols-5 gap-2 mb-6"></div>
 <div class="space-y-2 text-xs">
@@ -2917,7 +2917,10 @@ EX.tgR = function(qid) { EX.ragu[qid] = !EX.ragu[qid]; EX.render(); EX.renderNav
 EX.pr = function() { if (EX.cur > 0) { EX.cur--; EX.render(); EX.renderNav(); } };
 EX.nx = function() { if (EX.cur < EX.soal.length - 1) { EX.cur++; EX.render(); EX.renderNav(); } };
 EX.go = function(i) { EX.cur = i; EX.render(); EX.renderNav(); };
-EX.tgSB = function() { var sb = document.getElementById('exam_sb'); if (sb) sb.classList.toggle('es'); };
+EX.tgSB = function() { 
+    var sb = document.getElementById('exam_sb'); 
+    if (sb) sb.classList.toggle('hidden'); 
+};
 EX.mkPair = function(qid, li, ri) {
 if (ri === '') return;
 var pairs = (EX.answers[qid] || '').split('|').filter(Boolean);
