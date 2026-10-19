@@ -2790,7 +2790,7 @@ hiM('mt');
 EX.ujian = data.ujian; EX.soal = data.soal; EX.siswa = data.siswa || U;
 EX.answers = {}; EX.ragu = {}; EX.cur = 0; EX.paused = false;
 EX.viols = []; EX.vc = 0; EX.st = Date.now();
-EX.mS = {}; EX.oS = {}; EX.mapJawaban = {}; EX.mapKanan = {}; EX.mapSusun = {}; EX._submitted = false;
+EX.mS = {}; EX.oS = {}; EX.mapJawaban = {}; EX.mapKanan = {}; EX.mapSusun = {}; EX._submitted = false; EX._submitting = false; // Tambahkan baris ini
 EX.tl = (parseInt(EX.ujian.durasi) || 90) * 60;
 EX.endTime = Date.now() + (EX.tl * 1000);
 if (EX.ujian.acak_soal === 'true' || EX.ujian.acak_soal === true) {
@@ -2953,8 +2953,8 @@ if (EX.tl === 300 && el) el.style.color = '#f87171';
 };
 EX.cf = function() {
     // ✅ Cegah multiple click
-    if (EX._submitting || EX._submitted) {
-        toast('Ujian sedang diproses...', 'warning');
+    if (EX._submitting) {
+        toast('Ujian sedang diproses, mohon tunggu...', 'warning');
         return;
     }
     
@@ -2994,7 +2994,7 @@ EX.cf = function() {
         return;
     }
     
-    // ✅ GANTI BAGIAN confirm() DENGAN CUSTOM MODAL INI:
+    // ✅ MODAL KONFIRMASI (Memanggil EX.submit() LANGSUNG)
     var mb = document.getElementById('mb');
     if (mb) {
         var msgHTML = '<div class="text-center">' +
@@ -3005,40 +3005,28 @@ EX.cf = function() {
             '<p class="text-sm text-white mb-6">Yakin ingin mengumpulkan ujian sekarang?</p>' +
             '<div class="flex gap-3">' +
             '<button onclick="hiM(\'mg\')" class="flex-1 glass px-4 py-3 rounded-xl font-semibold text-gray-300 hover:bg-white/10">Batal</button>' +
-            '<button onclick="hiM(\'mg\'); EX._doSubmit();" class="flex-1 bp px-4 py-3 rounded-xl font-semibold">Ya, Kirim</button>' +
+            '<button onclick="hiM(\'mg\'); EX.submit();" class="flex-1 bp px-4 py-3 rounded-xl font-semibold">Ya, Kirim</button>' +
             '</div></div>';
                     
         mb.innerHTML = msgHTML;
         shM('mg');
         ic();
     }
-}; // ✅ INI PENUTUP FUNGSI EX.cf YANG TADI HILANG
-
-EX._doSubmit = function() {
-    if (EX._submitting || EX._submitted) {
-        toast('Ujian sedang atau sudah diproses...', 'warning');
-        return;
-    }
-    EX._submitting = true;
-    EX.submit();
 };
 
 EX.submit = function() {
-    // ✅ PAKSA TUTUP OVERLAY DIJEDA & RESET PAUSE jika tiba-tiba muncul saat proses submit
+    // ✅ PAKSA TUTUP OVERLAY DIJEDA & RESET PAUSE
     LM.hideOverlay('po'); 
     EX.paused = false;
 
-    // ✅ Triple-check untuk mencegah double submit
-    if (EX._submitted) {
-        console.log('Submit sudah diproses, diabaikan');
-        return;
-    }
+    // ✅ Cegah double click / double submit
     if (EX._submitting) {
         console.log('Submit sedang berlangsung, diabaikan');
         return;
     }
+    
+    // ✅ Kunci proses submit DI SINI (bukan di fungsi lain)
     EX._submitting = true;
-    EX._submitted = true;
     
     if (EX.timer) clearInterval(EX.timer);
     cAC(); 
@@ -3093,20 +3081,18 @@ EX.submit = function() {
         client_checksum: btoa(EX.ujian.id + ':' + U.id + ':' + EX.st)
     })
     .then(function(r) {
-        EX._submitting = false;
+        EX._submitting = false; // ✅ Buka kunci
         
         if (!r.s) {
-            if (r.error && r.error.indexOf('sudah') !== -1) {
-                if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center">' +
-                    '<p class="text-yellow-400 text-lg mb-4">⚠ ' + esc(r.error) + '</p>' +
-                    '<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
-            } else {
-                if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center">' +
-                    '<p class="text-red-400 text-lg mb-4">' + esc(r.error) + '</p>' +
-                    '<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
-            }
+            // Jika gagal, tampilkan error dan biarkan siswa muat ulang untuk coba lagi
+            if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center">' +
+                '<p class="text-red-400 text-lg mb-4">' + esc(r.error || 'Gagal mengirim jawaban') + '</p>' +
+                '<button onclick="location.reload()" class="bp px-6 py-3 rounded-xl font-semibold">Muat Ulang & Coba Lagi</button></div>';
             return;
         }
+        
+        // ✅ Hanya set _submitted = true jika BERHASIL
+        EX._submitted = true;
         
         var d = r.d;
         if (d.status === 'perlu_penilaian') {
@@ -3139,8 +3125,8 @@ EX.submit = function() {
         flushCache();
     })
     .catch(function(err) {
-        EX._submitting = false;
-        if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center"><p class="text-red-400 text-lg mb-4">Gagal: ' + esc(err) + '</p><button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
+        EX._submitting = false; // ✅ Buka kunci agar bisa retry jika koneksi putus
+        if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center"><p class="text-red-400 text-lg mb-4">Gagal koneksi: ' + esc(err) + '</p><button onclick="location.reload()" class="bp px-6 py-3 rounded-xl font-semibold">Muat Ulang & Coba Lagi</button></div>';
     });
 };
 var _blurCooldown = false;
