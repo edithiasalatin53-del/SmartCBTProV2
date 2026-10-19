@@ -2770,11 +2770,11 @@ EX.etk = function() {
       elem.msRequestFullscreen();
     }
     
-    if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock('landscape').catch(function(e) { 
-        console.log("Orientation lock error:", e); 
-      });
-    }
+if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock('portrait').catch(function(e) {
+        console.log("Orientation lock error:", e);
+    });
+}
     
     EX.start(r.d);
   })
