@@ -95,14 +95,6 @@ body { background:#fff!important; color:#111!important; padding:0!important; mar
 .file-preview-card img{max-width:100%;max-height:400px;height:auto;border-radius:8px;cursor:pointer;display:block;margin:0 auto}
 .file-preview-card iframe{width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:#000}
 .file-preview-card iframe.video-frame{aspect-ratio:16/9}
-/* ✅ FIX: Mobile exam sidebar overlay */
-.exam-sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;backdrop-filter:blur(3px)}
-.exam-sidebar-overlay.active{display:block}
-.exam-sidebar-mobile{position:fixed;right:-300px;top:0;bottom:0;width:280px;z-index:61;background:rgba(10,10,26,.95);backdrop-filter:blur(30px);border-left:1px solid rgba(255,255,255,.1);transition:right .3s ease;overflow-y:auto;padding:16px}
-.exam-sidebar-mobile.open{right:0}
-@media(min-width:769px){
-.exam-sidebar-overlay,.exam-sidebar-mobile{display:none!important}
-}
 </style>
 </head>
 <body class="h-full gb text-white overflow-hidden">
@@ -196,26 +188,23 @@ body { background:#fff!important; color:#111!important; padding:0!important; mar
 </main>
 </div>
 <div id="se" class="hidden flex-1 flex flex-col overflow-hidden">
-<header class="gs border-b border-white/10 px-4 lg:px-6 py-3 flex items-center justify-between shrink-0">
-<div class="flex items-center gap-2 lg:gap-4">
+<header class="gs border-b border-white/10 px-6 py-3 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-4">
 <i data-lucide="file-text" class="w-5 h-5 text-purple-400"></i>
-<span class="font-semibold text-xs lg:text-sm truncate max-w-[120px] lg:max-w-none" id="et"></span>
-<span class="text-xs text-gray-400 hidden lg:inline" id="ei"></span>
+<span class="font-semibold text-sm" id="et"></span>
+<span class="text-xs text-gray-400" id="ei"></span>
 </div>
-<!-- ✅ FIX: Tombol sidebar tampil di semua ukuran layar -->
-<button onclick="EX.tgSB()" class="glass px-3 py-1.5 rounded-lg flex items-center gap-2 text-sm hover:bg-white/10 transition">
+<button onclick="EX.tgSB()" class="hidden lg:flex glass px-3 py-1.5 rounded-lg items-center gap-2 text-sm hover:bg-white/10 transition">
 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></svg>
-<span class="hidden lg:inline">Navigasi</span>
 </button>
-<div class="flex items-center gap-2 bg-red-500/20 px-2 lg:px-3 py-1.5 rounded-lg">
+<div class="flex items-center gap-2 bg-red-500/20 px-3 py-1.5 rounded-lg">
 <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-400"></i>
 <span class="text-xs text-red-300 hidden lg:inline">Dilarang screenshot &amp; pindah tab</span>
 <span id="etm" class="text-sm font-mono font-bold text-red-300">00:00:00</span>
 </div>
 </header>
 <div class="flex-1 flex overflow-hidden">
-<div class="flex-1 overflow-y-auto p-4 pb-28 lg:p-8 lg:pb-8"><div id="eq"></div></div>
-<!-- Desktop sidebar (tetap seperti sebelumnya) -->
+<div class="flex-1 overflow-y-auto p-6 pb-20 lg:p-8 lg:pb-8"><div id="eq"></div></div>
 <aside id="exam_sb" class="es w-56 gs border-l border-white/10 p-4 overflow-y-auto shrink-0 transition-all duration-300">
 <h3 class="text-sm font-semibold mb-3">Navigasi</h3>
 <div id="en" class="grid grid-cols-5 gap-2 mb-6"></div>
@@ -227,37 +216,12 @@ body { background:#fff!important; color:#111!important; padding:0!important; mar
 <button onclick="EX.cf()" class="w-full mt-6 bg-green-600 hover:bg-green-700 px-4 py-3 rounded-xl text-sm font-semibold transition">Selesai &amp; Kirim</button>
 </aside>
 </div>
-<!-- ✅ FIX: Mobile bottom navigation dengan tombol Selesai & Kirim -->
-<div class="md:hidden fixed bottom-0 left-0 right-0 gs border-t border-white/10 px-3 py-2 z-50 safe-area-bottom">
-<!-- Baris 1: Navigasi soal -->
-<div class="flex items-center justify-between gap-2 mb-2">
-<button onclick="EX.pr()" class="glass px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">&larr; Prev</button>
-<span class="text-xs text-gray-400 font-mono" id="emb">1/10</span>
-<button onclick="EX.nx()" class="bp px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">Next &rarr;</button>
-</div>
-<!-- ✅ Baris 2: Tombol Selesai & Kirim (FIX UTAMA) -->
-<button onclick="EX.cf()" class="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 px-4 py-2.5 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 shadow-lg shadow-green-900/30">
-<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4z"/></svg>
-Selesai &amp; Kirim
-</button>
-</div>
-</div>
-<!-- ✅ FIX: Mobile sidebar overlay untuk navigasi soal -->
-<div id="exam_sidebar_overlay" class="exam-sidebar-overlay" onclick="EX.closeMobileSidebar()"></div>
-<div id="exam_sidebar_mobile" class="exam-sidebar-mobile">
-<div class="flex items-center justify-between mb-4">
-<h3 class="text-sm font-semibold">Navigasi Soal</h3>
-<button onclick="EX.closeMobileSidebar()" class="text-gray-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
-</div>
-<div id="en_mobile" class="grid grid-cols-5 gap-2 mb-6"></div>
-<div class="space-y-2 text-xs mb-6">
-<div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-purple-500"></div><span class="text-gray-400">Dijawab</span></div>
-<div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-yellow-500"></div><span class="text-gray-400">Ragu</span></div>
-<div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-white/10"></div><span class="text-gray-400">Belum</span></div>
-</div>
-<div class="border-t border-white/10 pt-4">
-<div class="text-xs text-gray-400 mb-2">Status Jawaban:</div>
-<div id="mobile_status_bar" class="text-sm font-semibold text-green-400">0 / 0 dijawab</div>
+<div class="md:hidden fixed bottom-0 left-0 right-0 gs border-t border-white/10 px-3 py-3 flex items-center justify-between z-50 safe-area-bottom gap-2">
+    <button onclick="EX.pr()" class="glass px-3 py-2 rounded-lg text-sm">&larr;</button>
+    <span class="text-sm text-gray-400" id="emb"></span>
+    <button onclick="EX.nx()" class="bp px-3 py-2 rounded-lg text-sm">&rarr;</button>
+    <!-- ✅ Tombol Selesai untuk Mobile -->
+    <button onclick="EX.cf()" class="bg-green-600 hover:bg-green-700 px-3 py-2 rounded-lg text-sm font-semibold text-white whitespace-nowrap shadow-lg">Selesai</button>
 </div>
 </div>
 <div id="mg" class="fixed inset-0 z-[110] hidden items-center justify-center mo">
@@ -290,62 +254,67 @@ Selesai &amp; Kirim
 </div>
 <script>
 var API_URL = 'https://script.google.com/macros/s/AKfycbyKqKDKjMQ7MtXTa1vtrflS5detWbEkx9z0rrxPPdUTHID8AtzOwPgNclZWkAiMQerOKQ/exec';
+
 function getFileDisplayUrl(fileId, type) {
-if (!fileId) return '';
-if (String(fileId).indexOf('http') === 0) return fileId;
-type = (type || 'file').toLowerCase();
-if (type === 'image') {
-return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(fileId) + '&sz=w1000';
-} else if (type === 'video') {
-return 'https://drive.google.com/file/d/' + encodeURIComponent(fileId) + '/preview';
-} else {
-return 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(fileId);
+  if (!fileId) return '';
+  if (String(fileId).indexOf('http') === 0) return fileId;
+  type = (type || 'file').toLowerCase();
+  if (type === 'image') {
+    return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(fileId) + '&sz=w1000';
+  } else if (type === 'video') {
+    return 'https://drive.google.com/file/d/' + encodeURIComponent(fileId) + '/preview';
+  } else {
+    return 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(fileId);
+  }
 }
-}
+
 function parseJawabanFile(val) {
-if (!val) return null;
-if (typeof val === 'object' && val !== null) return val;
-if (typeof val === 'string') {
-val = val.trim();
-if (!val) return null;
-try {
-var parsed = JSON.parse(val);
-if (parsed && typeof parsed === 'object') return parsed;
-} catch(e) {
-if (val.indexOf('http') === 0 || val.indexOf('drive.google.com') !== -1) {
-return { url: val, name: 'File', type: 'file' };
+  if (!val) return null;
+  if (typeof val === 'object' && val !== null) return val;
+  if (typeof val === 'string') {
+    val = val.trim();
+    if (!val) return null;
+    try {
+      var parsed = JSON.parse(val);
+      if (parsed && typeof parsed === 'object') return parsed;
+    } catch(e) {
+      if (val.indexOf('http') === 0 || val.indexOf('drive.google.com') !== -1) {
+        return { url: val, name: 'File', type: 'file' };
+      }
+      if (val.length >= 20 && val.indexOf(' ') === -1) {
+        return { url: val, name: 'File', type: 'file' };
+      }
+    }
+  }
+  return null;
 }
-if (val.length >= 20 && val.indexOf(' ') === -1) {
-return { url: val, name: 'File', type: 'file' };
-}
-}
-}
-return null;
-}
+
 function renderFileHTML(fileObj) {
-if (!fileObj || !fileObj.url) return '';
-var type = fileObj.type || 'file';
-var displayUrl = getFileDisplayUrl(fileObj.url, type);
-var fileName = esc(fileObj.name || 'File');
-if (type === 'image') {
-return '<div class="file-preview-card">' +
-'<img src="' + esc(displayUrl) + '" class="cursor-pointer" onclick="zoomImg(\'' + escJ(displayUrl) + '\')">' +
-'<p class="text-xs text-gray-400 mt-2 text-center"><i data-lucide="image" class="w-3 h-3 inline"></i> ' + fileName + '</p></div>';
-} else if (type === 'video') {
-return '<div class="file-preview-card">' +
-'<iframe src="' + esc(displayUrl) + '" class="video-frame" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>' +
-'<div class="flex items-center justify-between mt-2">' +
-'<span class="text-xs text-gray-400"><i data-lucide="video" class="w-3 h-3 inline"></i> ' + fileName + '</span>' +
-'<a href="https://drive.google.com/uc?export=download&id=' + encodeURIComponent(fileObj.url) + '" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center gap-1"><i data-lucide="download" class="w-3 h-3"></i> Download</a>' +
-'</div></div>';
-} else {
-return '<a href="' + esc(displayUrl) + '" target="_blank" class="glass px-4 py-3 rounded-xl text-sm flex items-center gap-3 hover:bg-white/10 w-full mt-2">' +
-'<i data-lucide="file" class="w-5 h-5 text-purple-400"></i>' +
-'<span class="flex-1 truncate">' + fileName + '</span>' +
-'<i data-lucide="download" class="w-4 h-4 text-cyan-400"></i>' +
-'</a>';
+  if (!fileObj || !fileObj.url) return '';
+  var type = fileObj.type || 'file';
+  var displayUrl = getFileDisplayUrl(fileObj.url, type);
+  var fileName = esc(fileObj.name || 'File');
+  
+  if (type === 'image') {
+    return '<div class="file-preview-card">' +
+      '<img src="' + esc(displayUrl) + '" class="cursor-pointer" onclick="zoomImg(\'' + escJ(displayUrl) + '\')">' +
+      '<p class="text-xs text-gray-400 mt-2 text-center"><i data-lucide="image" class="w-3 h-3 inline"></i> ' + fileName + '</p></div>';
+  } else if (type === 'video') {
+    return '<div class="file-preview-card">' +
+      '<iframe src="' + esc(displayUrl) + '" class="video-frame" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>' +
+      '<div class="flex items-center justify-between mt-2">' +
+        '<span class="text-xs text-gray-400"><i data-lucide="video" class="w-3 h-3 inline"></i> ' + fileName + '</span>' +
+        '<a href="https://drive.google.com/uc?export=download&id=' + encodeURIComponent(fileObj.url) + '" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center gap-1"><i data-lucide="download" class="w-3 h-3"></i> Download</a>' +
+      '</div></div>';
+  } else {
+    return '<a href="' + esc(displayUrl) + '" target="_blank" class="glass px-4 py-3 rounded-xl text-sm flex items-center gap-3 hover:bg-white/10 w-full mt-2">' +
+      '<i data-lucide="file" class="w-5 h-5 text-purple-400"></i>' +
+      '<span class="flex-1 truncate">' + fileName + '</span>' +
+      '<i data-lucide="download" class="w-4 h-4 text-cyan-400"></i>' +
+      '</a>';
+  }
 }
-}
+
 var LM = {
 layouts: ['sl', 'sd', 'se'],
 hideAll: function() {
@@ -390,11 +359,13 @@ if (_cache[key] && Date.now() - _cache[key].t < 30000) return Promise.resolve(_c
 return G(action, params).then(function(r) { _cache[key] = { d: r, t: Date.now() }; return r; });
 }
 function flushCache() { Object.keys(_cache).forEach(function(k) { delete _cache[k]; }); }
+
 function imgUrl(id) {
-if (!id) return '';
-if (String(id).indexOf('http') === 0) return id;
-return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w1000';
+  if (!id) return '';
+  if (String(id).indexOf('http') === 0) return id;
+  return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w1000';
 }
+
 function imgOnErr(fbUrl) {
 var s = fbUrl.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 return "this.onerror=function(){this.style.display='none'};this.src='" + s + "';";
@@ -517,7 +488,7 @@ function toast(msg, type) {
 type = type || 'success';
 var colors = { success: 'text-green-400', error: 'text-red-400', warning: 'text-yellow-400' };
 var d = document.createElement('div');
-d.className = 'fixed bottom-20 left-1/2 -translate-x-1/2 z-[200] gs px-6 py-3 rounded-xl text-sm font-medium asu';
+d.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] gs px-6 py-3 rounded-xl text-sm font-medium asu';
 d.innerHTML = '<span class="' + colors[type] + '">' + esc(msg) + '</span>';
 document.body.appendChild(d);
 setTimeout(function() { d.style.opacity = '0'; setTimeout(function() { d.remove(); }, 300); }, 3000);
@@ -612,7 +583,6 @@ EX.ujian = null; EX.soal = []; EX.answers = {}; EX.ragu = {}; EX.cur = 0;
 EX.tl = 0; EX.timer = null; EX.paused = false; EX.viols = []; EX.vc = 0;
 EX._submitted = false; EX.mS = {}; EX.oS = {}; EX.mapJawaban = {}; EX.mapKanan = {}; EX.mapSusun = {};
 LM.hideAll(); document.body.classList.remove('exam-active');
-EX.closeMobileSidebar();
 if (document.exitFullscreen) {
 document.exitFullscreen().catch(function(){});
 } else if (document.webkitExitFullscreen) {
@@ -800,76 +770,88 @@ ct.innerHTML = html;
 ic();
 }).catch(function(e) { ct.innerHTML = '<p class="text-red-400">' + esc(e) + '</p>'; });
 },
+
+// ✅ DIPERBAIKI: Form Tambah/Edit Tugas dengan Multi-Select Kelas
 fTugas: function(id) {
-var loadPromise = id ? G('getTugasDetail', { id: id }) : Promise.resolve({s:true, d:null});
-loadPromise.then(function(res) {
-var t = id ? res.d : null;
-var lampiranVal = '[]';
-if (t && t.lampiran) {
-try { lampiranVal = typeof t.lampiran === 'string' ? t.lampiran : JSON.stringify(t.lampiran); } catch(e) { lampiranVal = '[]'; }
-}
-var html = '<h3 class="text-lg font-bold mb-4">' + (id ? 'Edit' : 'Tambah') + ' Tugas</h3>' +
-'<form onsubmit="return DH.sTugas(event, ' + (id ? "'" + id + "'" : 'null') + ')"><div class="space-y-4">' +
-'<div><label class="text-xs text-gray-400 block mb-1">Judul Tugas *</label>' +
-'<input name="judul" value="' + esc(t ? t.judul : '') + '" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500" required></div>' +
-'<div><label class="text-xs text-gray-400 block mb-2">Pilih Kelas Tujuan (Bisa lebih dari satu) *</label>' +
-'<div id="tugas_kelas_grid" class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-2"></div>' +
-'<input type="hidden" name="kelas_ids" id="tugas_kelas_ids">' +
-'<input type="hidden" name="kelas_namas" id="tugas_kelas_namas">' +
-'<p class="text-xs text-gray-500 mt-1" id="tugas_kelas_selected_text">Belum ada kelas dipilih</p></div>' +
-'<div><label class="text-xs text-gray-400 block mb-1">Tenggat Waktu</label>' +
-'<input name="tenggat" type="datetime-local" value="' + esc(t ? (t.tenggat || '') : '') + '" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500"></div>' +
-'<div><label class="text-xs text-gray-400 block mb-1">Deskripsi / Instruksi</label>' +
-'<textarea name="deskripsi" rows="5" placeholder="Tuliskan instruksi tugas untuk siswa..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500">' + esc(t ? t.deskripsi : '') + '</textarea></div>' +
-'<div><label class="text-xs text-gray-400 block mb-1">Lampiran (File, Gambar, Video)</label>' +
-'<p class="text-xs text-gray-500 mb-2">Mendukung: PDF, DOC, gambar, video, dll. Maks 15MB per file.</p>' +
-'<input type="hidden" name="lampiran" id="tugas_lampiran" value="' + esc(lampiranVal) + '">' +
-'<div id="tugas_lampiran_list" class="flex flex-wrap gap-2 mb-2"></div>' +
-'<button type="button" onclick="DH.upTugasFile()" class="glass px-4 py-2 rounded-lg text-sm hover:bg-white/10 flex items-center gap-2"><i data-lucide="upload" class="w-4 h-4"></i> Upload File</button>' +
-'</div></div>' +
-'<button type="submit" class="w-full bp py-3 rounded-xl font-semibold mt-6">Simpan Tugas</button></form>';
-shM('mg');
-document.getElementById('mb').innerHTML = html;
-G('getKelas').then(function(kr) {
-if (kr.s) {
-var grid = document.getElementById('tugas_kelas_grid');
-grid.innerHTML = '';
-var existingIds = t ? String(t.kelas_id || '').split(',').filter(Boolean) : [];
-kr.d.forEach(function(k) {
-var isChecked = existingIds.indexOf(String(k.id)) !== -1;
-var div = document.createElement('div');
-div.className = 'kcb ' + (isChecked ? 'on' : '');
-div.onclick = function(e) {
-e.preventDefault();
-div.classList.toggle('on');
-var cb = div.querySelector('input[type="checkbox"]');
-cb.checked = div.classList.contains('on');
-DH.updateTugasKelasSelection();
-};
-div.innerHTML = '<input type="checkbox" value="' + k.id + '" data-n="' + esc(k.nama) + '"' + (isChecked ? ' checked' : '') + ' class="hidden"><span class="kdot"></span><span class="text-sm">Kelas ' + esc(k.nama) + '</span>';
-grid.appendChild(div);
-});
-DH.updateTugasKelasSelection();
-}
-});
-DH.renderTugasLampiran();
-ic();
-});
+  var loadPromise = id ? G('getTugasDetail', { id: id }) : Promise.resolve({s:true, d:null});
+  loadPromise.then(function(res) {
+    var t = id ? res.d : null;
+    var lampiranVal = '[]';
+    if (t && t.lampiran) {
+      try { lampiranVal = typeof t.lampiran === 'string' ? t.lampiran : JSON.stringify(t.lampiran); } catch(e) { lampiranVal = '[]'; }
+    }
+    var html = '<h3 class="text-lg font-bold mb-4">' + (id ? 'Edit' : 'Tambah') + ' Tugas</h3>' +
+      '<form onsubmit="return DH.sTugas(event, ' + (id ? "'" + id + "'" : 'null') + ')"><div class="space-y-4">' +
+      '<div><label class="text-xs text-gray-400 block mb-1">Judul Tugas *</label>' +
+      '<input name="judul" value="' + esc(t ? t.judul : '') + '" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500" required></div>' +
+      
+      // ✅ BAGIAN MULTI-SELECT KELAS
+      '<div><label class="text-xs text-gray-400 block mb-2">Pilih Kelas Tujuan (Bisa lebih dari satu) *</label>' +
+      '<div id="tugas_kelas_grid" class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-2"></div>' +
+      '<input type="hidden" name="kelas_ids" id="tugas_kelas_ids">' +
+      '<input type="hidden" name="kelas_namas" id="tugas_kelas_namas">' +
+      '<p class="text-xs text-gray-500 mt-1" id="tugas_kelas_selected_text">Belum ada kelas dipilih</p></div>' +
+      // ==========================================
+
+      '<div><label class="text-xs text-gray-400 block mb-1">Tenggat Waktu</label>' +
+      '<input name="tenggat" type="datetime-local" value="' + esc(t ? (t.tenggat || '') : '') + '" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500"></div>' +
+      '<div><label class="text-xs text-gray-400 block mb-1">Deskripsi / Instruksi</label>' +
+      '<textarea name="deskripsi" rows="5" placeholder="Tuliskan instruksi tugas untuk siswa..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500">' + esc(t ? t.deskripsi : '') + '</textarea></div>' +
+      '<div><label class="text-xs text-gray-400 block mb-1">Lampiran (File, Gambar, Video)</label>' +
+      '<p class="text-xs text-gray-500 mb-2">Mendukung: PDF, DOC, gambar, video, dll. Maks 15MB per file.</p>' +
+      '<input type="hidden" name="lampiran" id="tugas_lampiran" value="' + esc(lampiranVal) + '">' +
+      '<div id="tugas_lampiran_list" class="flex flex-wrap gap-2 mb-2"></div>' +
+      '<button type="button" onclick="DH.upTugasFile()" class="glass px-4 py-2 rounded-lg text-sm hover:bg-white/10 flex items-center gap-2"><i data-lucide="upload" class="w-4 h-4"></i> Upload File</button>' +
+      '</div></div>' +
+      '<button type="submit" class="w-full bp py-3 rounded-xl font-semibold mt-6">Simpan Tugas</button></form>';
+    shM('mg');
+    document.getElementById('mb').innerHTML = html;
+    
+    // ✅ Logika untuk mengisi dan mengelola checkbox kelas
+    G('getKelas').then(function(kr) {
+      if (kr.s) {
+        var grid = document.getElementById('tugas_kelas_grid');
+        grid.innerHTML = '';
+        var existingIds = t ? String(t.kelas_id || '').split(',').filter(Boolean) : [];
+        
+        kr.d.forEach(function(k) {
+          var isChecked = existingIds.indexOf(String(k.id)) !== -1;
+          var div = document.createElement('div');
+          div.className = 'kcb ' + (isChecked ? 'on' : '');
+          div.onclick = function(e) {
+            e.preventDefault();
+            div.classList.toggle('on');
+            var cb = div.querySelector('input[type="checkbox"]');
+            cb.checked = div.classList.contains('on');
+            DH.updateTugasKelasSelection();
+          };
+          div.innerHTML = '<input type="checkbox" value="' + k.id + '" data-n="' + esc(k.nama) + '"' + (isChecked ? ' checked' : '') + ' class="hidden"><span class="kdot"></span><span class="text-sm">Kelas ' + esc(k.nama) + '</span>';
+          grid.appendChild(div);
+        });
+        DH.updateTugasKelasSelection(); // Sinkronisasi awal
+      }
+    });
+    DH.renderTugasLampiran();
+    ic();
+  });
 },
+
+// ✅ FUNGSI BARU: Update hidden input berdasarkan checkbox yang dipilih
 updateTugasKelasSelection: function() {
-var checked = document.querySelectorAll('#tugas_kelas_grid .kcb.on input[type="checkbox"]');
-var ids = [], names = [];
-checked.forEach(function(c) {
-ids.push(c.value);
-names.push(c.dataset.n);
-});
-var idsEl = document.getElementById('tugas_kelas_ids');
-var namesEl = document.getElementById('tugas_kelas_namas');
-var textEl = document.getElementById('tugas_kelas_selected_text');
-if (idsEl) idsEl.value = ids.join(',');
-if (namesEl) namesEl.value = names.join(', ');
-if (textEl) textEl.textContent = ids.length > 0 ? 'Dipilih: ' + names.join(', ') : 'Belum ada kelas dipilih';
+  var checked = document.querySelectorAll('#tugas_kelas_grid .kcb.on input[type="checkbox"]');
+  var ids = [], names = [];
+  checked.forEach(function(c) {
+    ids.push(c.value);
+    names.push(c.dataset.n);
+  });
+  var idsEl = document.getElementById('tugas_kelas_ids');
+  var namesEl = document.getElementById('tugas_kelas_namas');
+  var textEl = document.getElementById('tugas_kelas_selected_text');
+  if (idsEl) idsEl.value = ids.join(',');
+  if (namesEl) namesEl.value = names.join(', ');
+  if (textEl) textEl.textContent = ids.length > 0 ? 'Dipilih: ' + names.join(', ') : 'Belum ada kelas dipilih';
 },
+
 upTugasFile: function() {
 var inp = document.createElement('input');
 inp.type = 'file';
@@ -919,18 +901,20 @@ list.splice(idx, 1);
 lampiranEl.value = JSON.stringify(list);
 DH.renderTugasLampiran();
 },
+
+// ✅ DIPERBAIKI: Simpan Tugas dengan data kelas yang dipisah koma
 sTugas: function(e, id) {
 e.preventDefault();
 var f = e.target;
 var params = {
-judul: f.judul.value.trim(),
-deskripsi: f.deskripsi.value.trim(),
-kelas_id: document.getElementById('tugas_kelas_ids').value,
-kelas_nama: document.getElementById('tugas_kelas_namas').value,
-tenggat: f.tenggat.value,
-lampiran: f.lampiran.value,
-guru_id: U.id,
-guru_nama: U.nama
+  judul: f.judul.value.trim(),
+  deskripsi: f.deskripsi.value.trim(),
+  kelas_id: document.getElementById('tugas_kelas_ids').value,
+  kelas_nama: document.getElementById('tugas_kelas_namas').value,
+  tenggat: f.tenggat.value,
+  lampiran: f.lampiran.value,
+  guru_id: U.id,
+  guru_nama: U.nama
 };
 if (!params.judul) { toast('Judul wajib diisi', 'warning'); return false; }
 if (!params.kelas_id) { toast('Pilih minimal 1 kelas tujuan', 'warning'); return false; }
@@ -974,18 +958,20 @@ html += '<div class="space-y-3">' + pengumpulan.map(function(p) {
 var jawabanFile = parseJawabanFile(p.jawaban_file);
 var waktuKumpul = p.waktu_kumpul ? new Date(p.waktu_kumpul).toLocaleString('id-ID') : '-';
 var terlambat = tugas.tenggat && p.waktu_kumpul && new Date(p.waktu_kumpul) > new Date(tugas.tenggat);
+
 var fileBadge = '';
 if (jawabanFile && jawabanFile.url) {
-var type = jawabanFile.type || 'file';
-var icon = type === 'image' ? 'image' : type === 'video' ? 'video' : 'file';
-var color = type === 'image' ? 'text-green-400' : type === 'video' ? 'text-pink-400' : 'text-cyan-400';
-var displayUrl = getFileDisplayUrl(jawabanFile.url, type);
-fileBadge = '<a href="' + esc(displayUrl) + '" target="_blank" class="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition text-xs">' +
-'<i data-lucide="' + icon + '" class="w-4 h-4 ' + color + '"></i>' +
-'<span class="text-gray-300">' + esc(jawabanFile.name || 'File') + '</span>' +
-'<i data-lucide="external-link" class="w-3 h-3 text-gray-500"></i>' +
-'</a>';
+  var type = jawabanFile.type || 'file';
+  var icon = type === 'image' ? 'image' : type === 'video' ? 'video' : 'file';
+  var color = type === 'image' ? 'text-green-400' : type === 'video' ? 'text-pink-400' : 'text-cyan-400';
+  var displayUrl = getFileDisplayUrl(jawabanFile.url, type);
+  fileBadge = '<a href="' + esc(displayUrl) + '" target="_blank" class="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition text-xs">' +
+    '<i data-lucide="' + icon + '" class="w-4 h-4 ' + color + '"></i>' +
+    '<span class="text-gray-300">' + esc(jawabanFile.name || 'File') + '</span>' +
+    '<i data-lucide="external-link" class="w-3 h-3 text-gray-500"></i>' +
+    '</a>';
 }
+
 return '<div class="bg-white/5 rounded-xl p-4">' +
 '<div class="flex justify-between items-start mb-2">' +
 '<div><div class="font-semibold">' + esc(p.siswa_nama) + '</div>' +
@@ -2002,7 +1988,7 @@ deleteUjian: function(uid) {
 if (!uid) { toast('Pilih ujian dulu', 'warning'); return; }
 var sel = document.getElementById('ss');
 var namaUjian = sel && sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : 'ujian ini';
-if (!confirm('PERINGATAN!\nAnda akan menghapus "' + namaUjian + '" beserta semua soal, token, dan data nilai.\nTindakan ini TIDAK BISA dibatalkan!\nLanjutkan?')) return;
+if (!confirm('⚠ PERINGATAN!\nAnda akan menghapus "' + namaUjian + '" beserta:\n• Semua soal ujian\n• Token ujian\n• Semua data nilai siswa\n• Semua catatan pelanggaran\nTindakan ini TIDAK BISA dibatalkan!\nLanjutkan?')) return;
 toast('Menghapus ujian...', 'warning');
 G('deleteUjian', { ujian_id: uid })
 .then(function(r) {
@@ -2721,69 +2707,83 @@ document.getElementById('te').classList.add('hidden');
 document.getElementById('itk').focus();
 };
 EX.etk = function() {
-var tk = document.getElementById('itk').value.trim().toUpperCase();
-var err = document.getElementById('te');
-var btn = document.getElementById('btk');
-if (!tk) {
-err.textContent = 'Masukkan token';
-err.classList.remove('hidden');
-return;
-}
-err.classList.add('hidden');
-btn.disabled = true;
-btn.textContent = 'Memeriksa...';
-G('checkExamAttempt', {
-token: tk,
-siswa_id: U.id
-})
-.then(function(checkRes) {
-if (checkRes && checkRes.s && checkRes.d && checkRes.d.alreadyTaken) {
-btn.disabled = false;
-btn.textContent = 'Mulai';
-err.textContent = 'Anda sudah mengerjakan ujian ini. Hubungi admin untuk reset.';
-err.classList.remove('hidden');
-return;
-}
-btn.textContent = 'Menghubungkan...';
-return G('joinExam', {
-token: tk,
-siswa_id: U.id,
-siswa_nama: U.nama,
-kelas: U.kelas || ''
-});
-})
-.then(function(r) {
-if (!r) return;
-btn.disabled = false;
-btn.textContent = 'Mulai';
-if (!r.s) {
-err.textContent = r.error || 'Gagal bergabung';
-err.classList.remove('hidden');
-return;
-}
-EX.token = tk;
-hiM('mt');
-var elem = document.documentElement;
-if (elem.requestFullscreen) {
-elem.requestFullscreen().catch(function(e) { console.log("Fullscreen error:", e); });
-} else if (elem.webkitRequestFullscreen) {
-elem.webkitRequestFullscreen();
-} else if (elem.msRequestFullscreen) {
-elem.msRequestFullscreen();
-}
-if (screen.orientation && screen.orientation.lock) {
-screen.orientation.lock('landscape').catch(function(e) {
-console.log("Orientation lock error:", e);
-});
-}
-EX.start(r.d);
-})
-.catch(function(e) {
-btn.disabled = false;
-btn.textContent = 'Mulai';
-err.textContent = 'Error: ' + String(e);
-err.classList.remove('hidden');
-});
+  var tk = document.getElementById('itk').value.trim().toUpperCase();
+  var err = document.getElementById('te'); 
+  var btn = document.getElementById('btk');
+  
+  if (!tk) { 
+    err.textContent = 'Masukkan token'; 
+    err.classList.remove('hidden'); 
+    return; 
+  }
+  
+  err.classList.add('hidden'); 
+  btn.disabled = true; 
+  btn.textContent = 'Memeriksa...';
+  
+  // ✅ LANGKAH BARU: Cek dulu apakah siswa sudah pernah mengerjakan
+  G('checkExamAttempt', { 
+    token: tk, 
+    siswa_id: U.id 
+  })
+  .then(function(checkRes) {
+    // Jika backend mengembalikan error "sudah dikerjakan"
+    if (checkRes.s && checkRes.d && checkRes.d.alreadyTaken) {
+      btn.disabled = false; 
+      btn.textContent = 'Mulai';
+      err.textContent = '⚠ Anda sudah mengerjakan ujian ini. Hubungi admin untuk reset.';
+      err.classList.remove('hidden');
+      return;
+    }
+    
+    // Jika lolos, lanjutkan ke joinExam
+    btn.textContent = 'Menghubungkan...';
+    return G('joinExam', { 
+      token: tk, 
+      siswa_id: U.id, 
+      siswa_nama: U.nama, 
+      kelas: U.kelas || '' 
+    });
+  })
+  .then(function(r) {
+    if (!r) return; // Sudah di-handle di atas
+    
+    btn.disabled = false; 
+    btn.textContent = 'Mulai';
+    
+    if (!r.s) { 
+      err.textContent = r.error || 'Gagal bergabung'; 
+      err.classList.remove('hidden'); 
+      return; 
+    }
+    
+    EX.token = tk;
+    hiM('mt');
+    
+    // Fullscreen & orientation lock
+    var elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen().catch(function(e) { console.log("Fullscreen error:", e); });
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    }
+    
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock('landscape').catch(function(e) { 
+        console.log("Orientation lock error:", e); 
+      });
+    }
+    
+    EX.start(r.d);
+  })
+  .catch(function(e) {
+    btn.disabled = false; 
+    btn.textContent = 'Mulai';
+    err.textContent = 'Error: ' + String(e); 
+    err.classList.remove('hidden');
+  });
 };
 EX.start = function(data) {
 hiM('mt');
@@ -2825,25 +2825,13 @@ ic();
 };
 EX.renderNav = function() {
 var nav = document.getElementById('en'); if (!nav) return;
-var navHTML = EX.soal.map(function(q, i) {
+nav.innerHTML = EX.soal.map(function(q, i) {
 var cls = 'bg-white/10 text-gray-400';
 if (EX.answers[q.id]) cls = 'bg-purple-500 text-white';
 else if (EX.ragu[q.id]) cls = 'bg-yellow-500 text-white';
 return '<button onclick="EX.go(' + i + ')" class="w-10 h-10 rounded-lg text-xs font-bold ' + cls + ' transition hover:scale-105">' + (i+1) + '</button>';
 }).join('');
-nav.innerHTML = navHTML;
-// ✅ FIX: Sync mobile navigation too
-var navMobile = document.getElementById('en_mobile');
-if (navMobile) navMobile.innerHTML = navHTML;
 var mb = document.getElementById('emb'); if (mb) mb.textContent = (EX.cur + 1) + ' / ' + EX.soal.length;
-// ✅ FIX: Update mobile status bar
-var statusBar = document.getElementById('mobile_status_bar');
-if (statusBar) {
-var answered = 0;
-EX.soal.forEach(function(q) { if (EX.answers[q.id]) answered++; });
-statusBar.textContent = answered + ' / ' + EX.soal.length + ' dijawab';
-statusBar.className = 'text-sm font-semibold ' + (answered === EX.soal.length ? 'text-green-400' : 'text-yellow-400');
-}
 };
 EX.render = function() {
 var eq = document.getElementById('eq'); if (!eq || !EX.soal.length) return;
@@ -2928,31 +2916,8 @@ EX.selO = function(qid, ans) { EX.answers[qid] = ans; EX.render(); EX.renderNav(
 EX.tgR = function(qid) { EX.ragu[qid] = !EX.ragu[qid]; EX.render(); EX.renderNav(); };
 EX.pr = function() { if (EX.cur > 0) { EX.cur--; EX.render(); EX.renderNav(); } };
 EX.nx = function() { if (EX.cur < EX.soal.length - 1) { EX.cur++; EX.render(); EX.renderNav(); } };
-EX.go = function(i) { EX.cur = i; EX.render(); EX.renderNav(); EX.closeMobileSidebar(); };
-// ✅ FIX: Toggle sidebar works on both mobile and desktop
-EX.tgSB = function() {
-var isMobile = window.innerWidth <= 768;
-if (isMobile) {
-var overlay = document.getElementById('exam_sidebar_overlay');
-var sidebar = document.getElementById('exam_sidebar_mobile');
-if (sidebar && sidebar.classList.contains('open')) {
-EX.closeMobileSidebar();
-} else {
-if (overlay) overlay.classList.add('active');
-if (sidebar) sidebar.classList.add('open');
-}
-} else {
-var sb = document.getElementById('exam_sb');
-if (sb) sb.classList.toggle('es');
-}
-};
-// ✅ FIX: Close mobile sidebar
-EX.closeMobileSidebar = function() {
-var overlay = document.getElementById('exam_sidebar_overlay');
-var sidebar = document.getElementById('exam_sidebar_mobile');
-if (overlay) overlay.classList.remove('active');
-if (sidebar) sidebar.classList.remove('open');
-};
+EX.go = function(i) { EX.cur = i; EX.render(); EX.renderNav(); };
+EX.tgSB = function() { var sb = document.getElementById('exam_sb'); if (sb) sb.classList.toggle('es'); };
 EX.mkPair = function(qid, li, ri) {
 if (ri === '') return;
 var pairs = (EX.answers[qid] || '').split('|').filter(Boolean);
@@ -2987,157 +2952,196 @@ if (EX.tl === 300 && el) el.style.color = '#f87171';
 }, 1000);
 };
 EX.cf = function() {
-if (EX._submitting || EX._submitted) {
-toast('Ujian sedang diproses...', 'warning');
-return;
-}
-var unansweredQ = [];
-EX.soal.forEach(function(q, idx) {
-var ans = EX.answers[q.id];
-if (!ans || String(ans).trim() === '') {
-unansweredQ.push(idx + 1);
-}
-});
-var unanswered = unansweredQ.length;
-var raguC = Object.values(EX.ragu).filter(function(v) { return v; }).length;
-if (unanswered > 0) {
-var mb = document.getElementById('mb');
-if (mb) {
-mb.innerHTML = '<div class="text-center">' +
-'<div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4">' +
-'<i data-lucide="alert-triangle" class="w-8 h-8 text-yellow-400"></i></div>' +
-'<h3 class="text-xl font-bold text-yellow-400 mb-2">Masih Ada Soal Belum Dijawab!</h3>' +
-'<p class="text-sm text-gray-400 mb-4">Anda <strong class="text-white">tidak dapat mengumpulkan</strong> ujian karena masih ada <strong class="text-yellow-300">' + unanswered + ' soal</strong> yang belum dijawab.</p>' +
-'<div class="bg-white/5 rounded-xl p-4 mb-4 max-h-48 overflow-y-auto">' +
-'<p class="text-xs text-gray-400 mb-3 text-left">Nomor soal yang belum dijawab:</p>' +
-'<div class="flex flex-wrap gap-2 justify-center">' +
-unansweredQ.map(function(n) {
-return '<span class="w-9 h-9 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 flex items-center justify-center text-sm font-bold">' + n + '</span>';
-}).join('') +
-'</div></div>' +
-(raguC > 0 ? '<p class="text-xs text-yellow-400 mb-3 bg-yellow-500/10 rounded-lg p-2">Ada ' + raguC + ' soal yang Anda tandai ragu-ragu.</p>' : '') +
-'<p class="text-xs text-gray-500 mb-4">Silakan klik nomor soal di atas atau periksa kembali seluruh jawaban Anda.</p>' +
-'<button onclick="hiM(\'mg\')" class="bp px-6 py-3 rounded-xl font-semibold w-full">Periksa Kembali</button>' +
-'</div>';
-shM('mg');
-ic();
-}
-return;
-}
-var msg = 'Semua soal sudah dijawab.\n';
-if (raguC > 0) {
-msg += 'Perhatian: Ada ' + raguC + ' soal yang Anda tandai ragu.\n';
-}
-msg += 'Yakin ingin mengumpulkan ujian sekarang?';
-if (!confirm(msg)) return;
-EX._submitting = true;
-EX.submit();
+    // ✅ Cegah multiple click
+    if (EX._submitting || EX._submitted) {
+        toast('Ujian sedang diproses...', 'warning');
+        return;
+    }
+    
+    var unansweredQ = [];
+    EX.soal.forEach(function(q, idx) {
+        var ans = EX.answers[q.id];
+        if (!ans || String(ans).trim() === '') {
+            unansweredQ.push(idx + 1);
+        }
+    });
+    
+    var unanswered = unansweredQ.length;
+    var raguC = Object.values(EX.ragu).filter(function(v) { return v; }).length;
+    
+    if (unanswered > 0) {
+        var mb = document.getElementById('mb');
+        if (mb) {
+            mb.innerHTML = '<div class="text-center">' +
+                '<div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4">' +
+                '<i data-lucide="alert-triangle" class="w-8 h-8 text-yellow-400"></i></div>' +
+                '<h3 class="text-xl font-bold text-yellow-400 mb-2">Masih Ada Soal Belum Dijawab!</h3>' +
+                '<p class="text-sm text-gray-400 mb-4">Anda <strong class="text-white">tidak dapat mengumpulkan</strong> ujian karena masih ada <strong class="text-yellow-300">' + unanswered + ' soal</strong> yang belum dijawab.</p>' +
+                '<div class="bg-white/5 rounded-xl p-4 mb-4 max-h-48 overflow-y-auto">' +
+                '<p class="text-xs text-gray-400 mb-3 text-left">Nomor soal yang belum dijawab:</p>' +
+                '<div class="flex flex-wrap gap-2 justify-center">' +
+                unansweredQ.map(function(n) {
+                    return '<span class="w-9 h-9 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 flex items-center justify-center text-sm font-bold">' + n + '</span>';
+                }).join('') +
+                '</div></div>' +
+                (raguC > 0 ? '<p class="text-xs text-yellow-400 mb-3 bg-yellow-500/10 rounded-lg p-2">⚠ Ada ' + raguC + ' soal yang Anda tandai ragu-ragu.</p>' : '') +
+                '<p class="text-xs text-gray-500 mb-4">Silakan klik nomor soal di atas atau periksa kembali seluruh jawaban Anda.</p>' +
+                '<button onclick="hiM(\'mg\')" class="bp px-6 py-3 rounded-xl font-semibold w-full">Periksa Kembali</button>' +
+                '</div>';
+            shM('mg');
+            ic();
+        }
+        return;
+    }
+    
+    // ✅ GANTI BAGIAN confirm() DENGAN CUSTOM MODAL INI:
+    var mb = document.getElementById('mb');
+    if (mb) {
+        var msgHTML = '<div class="text-center">' +
+            '<div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">' +
+            '<i data-lucide="check-circle" class="w-8 h-8 text-green-400"></i></div>' +
+            '<h3 class="text-xl font-bold text-green-400 mb-2">Semua Soal Sudah Dijawab</h3>' +
+            '<p class="text-sm text-gray-400 mb-4">Anda telah menjawab semua soal.' + (raguC > 0 ? ' <br><span class="text-yellow-400">⚠ Ada ' + raguC + ' soal yang ditandai ragu.</span>' : '') + '</p>' +
+            '<p class="text-sm text-white mb-6">Yakin ingin mengumpulkan ujian sekarang?</p>' +
+            '<div class="flex gap-3">' +
+            '<button onclick="hiM(\'mg\')" class="flex-1 glass px-4 py-3 rounded-xl font-semibold text-gray-300 hover:bg-white/10">Batal</button>' +
+            '<button onclick="hiM(\'mg\'); EX._doSubmit();" class="flex-1 bp px-4 py-3 rounded-xl font-semibold">Ya, Kirim</button>' +
+            '</div></div>';
+                    
+        mb.innerHTML = msgHTML;
+        shM('mg');
+        ic();
+    }
+}; // ✅ INI PENUTUP FUNGSI EX.cf YANG TADI HILANG
+
+EX._doSubmit = function() {
+    if (EX._submitting || EX._submitted) {
+        toast('Ujian sedang atau sudah diproses...', 'warning');
+        return;
+    }
+    EX._submitting = true;
+    EX.submit();
 };
+
 EX.submit = function() {
-if (EX._submitted) {
-console.log('Submit sudah diproses, diabaikan');
-return;
-}
-if (EX._submitting) {
-console.log('Submit sedang berlangsung, diabaikan');
-return;
-}
-EX._submitting = true;
-EX._submitted = true;
-if (EX.timer) clearInterval(EX.timer);
-cAC();
-LM.hideAll();
-document.body.classList.remove('exam-active');
-EX.closeMobileSidebar();
-var se = document.getElementById('se');
-if(se) { se.classList.remove('hidden'); se.style.display = 'flex'; }
-var eq = document.getElementById('eq');
-if (eq) eq.innerHTML = ldH();
-var finalAnswers = {};
-for (var qid in EX.answers) {
-var ans = EX.answers[qid];
-var q = EX.soal.find(function(x) { return x.id === qid; });
-if (!q) continue;
-if (q.jenis === 'pg' && EX.mapJawaban[qid]) {
-finalAnswers[qid] = EX.mapJawaban[qid][ans] || ans;
-} else if (q.jenis === 'menjodohkan' && EX.mapKanan[qid]) {
-var pairs = ans.split('|').filter(Boolean);
-var translated = pairs.map(function(p) {
-var parts = p.split(',');
-return parts[0] + ',' + EX.mapKanan[qid][parts[1]];
-});
-finalAnswers[qid] = translated.join('|');
-} else if (q.jenis === 'menyusun' && EX.mapSusun[qid]) {
-var items = ans.split('|').filter(Boolean);
-var translated = items.map(function(idxAcak) {
-return EX.mapSusun[qid][idxAcak];
-});
-finalAnswers[qid] = translated.join('|');
-} else {
-finalAnswers[qid] = ans;
-}
-}
-G('submitExam', {
-ujian_id: EX.ujian.id,
-siswa_id: U.id,
-siswa_nama: U.nama,
-nis: U.username,
-kelas: U.kelas,
-jawaban: JSON.stringify(finalAnswers),
-waktu_mulai: new Date(EX.st).toISOString(),
-waktu_selesai: new Date().toISOString(),
-token: EX.token,
-pelanggaran: EX.vc,
-client_checksum: btoa(EX.ujian.id + ':' + U.id + ':' + EX.st)
-})
-.then(function(r) {
-EX._submitting = false;
-if (!r.s) {
-if (r.error && r.error.indexOf('sudah') !== -1) {
-if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center">' +
-'<p class="text-yellow-400 text-lg mb-4">' + esc(r.error) + '</p>' +
-'<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
-} else {
-if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center">' +
-'<p class="text-red-400 text-lg mb-4">' + esc(r.error) + '</p>' +
-'<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
-}
-return;
-}
-var d = r.d;
-if (d.status === 'perlu_penilaian') {
-if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center asu">' +
-'<div class="w-20 h-20 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-6"><i data-lucide="clock" class="w-10 h-10 text-yellow-400"></i></div>' +
-'<h2 class="text-2xl font-bold mb-2">Ujian Selesai!</h2>' +
-'<p class="text-gray-400 mb-6">' + esc(EX.ujian.nama) + '</p>' +
-'<div class="text-3xl font-extrabold text-yellow-400 mb-4">Nilai Sedang Diproses</div>' +
-'<p class="text-sm text-gray-400 mb-2">Jawaban essay Anda sedang menunggu penilaian manual dari guru.</p>' +
-'<div class="text-xs text-gray-500 mb-6 bg-white/5 inline-block px-4 py-2 rounded-lg">Jawaban Otomatis: Benar ' + d.benar + ' | Salah ' + d.salah + '</div><br>' +
-'<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold mt-4">Kembali ke Dashboard</button>' +
-'</div>';
-} else {
-var sk = parseInt(d.nilai) || 0;
-var skorMax = parseInt(d.skor_max) || sk;
-var pct = parseInt(d.persentase) || 0;
-var cl = pct >= 90 ? 'text-green-400' : pct >= 80 ? 'text-blue-400' : pct >= 70 ? 'text-yellow-400' : 'text-red-400';
-var gr = pct >= 90 ? 'A' : pct >= 80 ? 'B' : pct >= 70 ? 'C' : 'D';
-if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center asu">' +
-'<div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6"><i data-lucide="check-circle" class="w-10 h-10 text-green-400"></i></div>' +
-'<h2 class="text-2xl font-bold mb-2">Ujian Selesai!</h2>' +
-'<p class="text-gray-400 mb-6">' + esc(EX.ujian.nama) + '</p>' +
-'<div class="text-6xl font-extrabold ' + cl + ' mb-2">' + sk + '<span class="text-2xl text-gray-500"> / ' + skorMax + '</span></div>' +
-'<div class="text-sm text-gray-400 mb-1">Grade: <span class="font-bold text-white">' + gr + '</span> (' + pct + '%)</div>' +
-'<div class="text-xs text-gray-500 mb-6">Benar: ' + d.benar + ' | Salah: ' + d.salah + '</div>' +
-'<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali ke Dashboard</button>' +
-'</div>';
-}
-ic();
-flushCache();
-})
-.catch(function(err) {
-EX._submitting = false;
-if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center"><p class="text-red-400 text-lg mb-4">Gagal: ' + esc(err) + '</p><button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
-});
+    // ✅ PAKSA TUTUP OVERLAY DIJEDA & RESET PAUSE jika tiba-tiba muncul saat proses submit
+    LM.hideOverlay('po'); 
+    EX.paused = false;
+
+    // ✅ Triple-check untuk mencegah double submit
+    if (EX._submitted) {
+        console.log('Submit sudah diproses, diabaikan');
+        return;
+    }
+    if (EX._submitting) {
+        console.log('Submit sedang berlangsung, diabaikan');
+        return;
+    }
+    EX._submitting = true;
+    EX._submitted = true;
+    
+    if (EX.timer) clearInterval(EX.timer);
+    cAC(); 
+    LM.hideAll(); 
+    document.body.classList.remove('exam-active');
+    
+    var se = document.getElementById('se'); 
+    if(se) { se.classList.remove('hidden'); se.style.display = 'flex'; }
+    
+    var eq = document.getElementById('eq'); 
+    if (eq) eq.innerHTML = ldH();
+    
+    // Proses jawaban
+    var finalAnswers = {};
+    for (var qid in EX.answers) {
+        var ans = EX.answers[qid];
+        var q = EX.soal.find(function(x) { return x.id === qid; });
+        if (!q) continue;
+        
+        if (q.jenis === 'pg' && EX.mapJawaban[qid]) {
+            finalAnswers[qid] = EX.mapJawaban[qid][ans] || ans;
+        } else if (q.jenis === 'menjodohkan' && EX.mapKanan[qid]) {
+            var pairs = ans.split('|').filter(Boolean);
+            var translated = pairs.map(function(p) { 
+                var parts = p.split(','); 
+                return parts[0] + ',' + EX.mapKanan[qid][parts[1]]; 
+            });
+            finalAnswers[qid] = translated.join('|');
+        } else if (q.jenis === 'menyusun' && EX.mapSusun[qid]) {
+            var items = ans.split('|').filter(Boolean);
+            var translated = items.map(function(idxAcak) { 
+                return EX.mapSusun[qid][idxAcak]; 
+            });
+            finalAnswers[qid] = translated.join('|');
+        } else {
+            finalAnswers[qid] = ans;
+        }
+    }
+    
+    // ✅ Kirim ke backend
+    G('submitExam', {
+        ujian_id: EX.ujian.id,
+        siswa_id: U.id,
+        siswa_nama: U.nama,
+        nis: U.username,
+        kelas: U.kelas,
+        jawaban: JSON.stringify(finalAnswers),
+        waktu_mulai: new Date(EX.st).toISOString(),
+        waktu_selesai: new Date().toISOString(),
+        token: EX.token,
+        pelanggaran: EX.vc,
+        client_checksum: btoa(EX.ujian.id + ':' + U.id + ':' + EX.st)
+    })
+    .then(function(r) {
+        EX._submitting = false;
+        
+        if (!r.s) {
+            if (r.error && r.error.indexOf('sudah') !== -1) {
+                if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center">' +
+                    '<p class="text-yellow-400 text-lg mb-4">⚠ ' + esc(r.error) + '</p>' +
+                    '<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
+            } else {
+                if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center">' +
+                    '<p class="text-red-400 text-lg mb-4">' + esc(r.error) + '</p>' +
+                    '<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
+            }
+            return;
+        }
+        
+        var d = r.d;
+        if (d.status === 'perlu_penilaian') {
+            if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center asu">' +
+                '<div class="w-20 h-20 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-6"><i data-lucide="clock" class="w-10 h-10 text-yellow-400"></i></div>' +
+                '<h2 class="text-2xl font-bold mb-2">Ujian Selesai!</h2>' +
+                '<p class="text-gray-400 mb-6">' + esc(EX.ujian.nama) + '</p>' +
+                '<div class="text-3xl font-extrabold text-yellow-400 mb-4">Nilai Sedang Diproses</div>' +
+                '<p class="text-sm text-gray-400 mb-2">Jawaban essay Anda sedang menunggu penilaian manual dari guru.</p>' +
+                '<div class="text-xs text-gray-500 mb-6 bg-white/5 inline-block px-4 py-2 rounded-lg">Jawaban Otomatis: Benar ' + d.benar + ' | Salah ' + d.salah + '</div><br>' +
+                '<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold mt-4">Kembali ke Dashboard</button>' +
+                '</div>';
+        } else {
+            var sk = parseInt(d.nilai) || 0;
+            var skorMax = parseInt(d.skor_max) || sk;
+            var pct = parseInt(d.persentase) || 0;
+            var cl = pct >= 90 ? 'text-green-400' : pct >= 80 ? 'text-blue-400' : pct >= 70 ? 'text-yellow-400' : 'text-red-400';
+            var gr = pct >= 90 ? 'A' : pct >= 80 ? 'B' : pct >= 70 ? 'C' : 'D';
+            if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center asu">' +
+                '<div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6"><i data-lucide="check-circle" class="w-10 h-10 text-green-400"></i></div>' +
+                '<h2 class="text-2xl font-bold mb-2">Ujian Selesai!</h2>' +
+                '<p class="text-gray-400 mb-6">' + esc(EX.ujian.nama) + '</p>' +
+                '<div class="text-6xl font-extrabold ' + cl + ' mb-2">' + sk + '<span class="text-2xl text-gray-500"> / ' + skorMax + '</span></div>' +
+                '<div class="text-sm text-gray-400 mb-1">Grade: <span class="font-bold text-white">' + gr + '</span> (' + pct + '%)</div>' +
+                '<div class="text-xs text-gray-500 mb-6">Benar: ' + d.benar + ' | Salah: ' + d.salah + '</div>' +
+                '<button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali ke Dashboard</button>' +
+                '</div>';
+        }
+        ic();
+        flushCache();
+    })
+    .catch(function(err) {
+        EX._submitting = false;
+        if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center"><p class="text-red-400 text-lg mb-4">Gagal: ' + esc(err) + '</p><button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
+    });
 };
 var _blurCooldown = false;
 function sAC() {
@@ -3186,7 +3190,6 @@ if (cd <= 0) {
 clearInterval(ci); LM.hideOverlay('po'); EX.paused = false;
 if (EX.vc >= 5) {
 clearInterval(EX.timer); cAC(); document.body.classList.remove('exam-active');
-EX.closeMobileSidebar();
 var eq = document.getElementById('eq');
 if (eq) eq.innerHTML = '<div class="gs rounded-xl p-8 text-center"><i data-lucide="shield-alert" class="w-16 h-16 text-red-400 mx-auto mb-4"></i><h2 class="text-2xl font-bold text-red-400 mb-2">Ujian Dihentikan</h2><p class="text-gray-400 mb-6">Pelanggaran mencapai 5 kali</p><button onclick="AU.out()" class="bp px-6 py-3 rounded-xl font-semibold">Kembali</button></div>';
 ic();
